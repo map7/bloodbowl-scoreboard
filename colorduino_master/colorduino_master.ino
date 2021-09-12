@@ -154,7 +154,7 @@ long paletteShift;
 void setup()
 {
   Wire.begin(); // join i2c bus (address optional for master)
-  plasma_setup();   //plasma setup
+  /* plasma_setup();   //plasma setup */
 }
 
 void loop()
