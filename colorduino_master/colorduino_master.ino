@@ -350,7 +350,7 @@ void displayText(char chr, unsigned char R, unsigned char G, unsigned char B, ch
   }
   Char = chr - 32;
   j = 8 - bias;
-  for(i = 0;i< 8;i++)
+  for(i = 8;i> 0;i--)
   {
     chrtemp[j] = pgm_read_byte(&(font8_8[Char][i]));    
     j++;
