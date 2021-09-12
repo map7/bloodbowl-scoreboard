@@ -160,47 +160,47 @@ void setup()
 void loop()
 {
   //Plasma Morph for funky colour transitioning
-  //plasma_morph(); 
+  //plasma_morph();
 
-  displayText('2',0,255,80,0);
-  
-//  //Display Text for writing out scrolling messages
-//  for (int i = -7; i < 7; i++) {
-//    displayText('1', 0, 255, 80, i);
-//    delay(50);
-//  }
-//  for (int i = -7; i < 7; i++) {
-//    displayText('2', 0, 255, 80, i);
-//    delay(50);
-//  }
-//  for (int i = -7; i < 7; i++) {
-//    displayText('3', 0, 255, 80, i);
-//    delay(50);
-//  }
-//  for (int i = -7; i < 7; i++) {
-//    displayText('4', 0, 255, 80, i);
-//    delay(50);
-//  }
-//  for (int i = -7; i < 7; i++) {
-//    displayText('5', 0, 255, 80, i);
-//    delay(50);
-//  }
-//  for (int i = -7; i < 7; i++) {
-//    displayText('6', 0, 255, 80, i);
-//    delay(50);
-//  }
-//  for (int i = -7; i < 7; i++) {
-//    displayText('7', 0, 255, 80, i);
-//    delay(50);
-//  }
-//  for (int i = -7; i < 7; i++) {
-//    displayText('8', 0, 255, 80, i);
-//    delay(50);
-//  }
-//  for (int i = -7; i < 7; i++) {
-//    displayText('9', 0, 255, 80, i);
-//    delay(50);
-//  }
+  //  displayText('0',255,0,0,0);
+
+  //Display Text for writing out scrolling messages
+  for (int i = -7; i < 7; i++) {
+    displayText('1', 0, 255, 0, i);
+    delay(200);
+  }
+  for (int i = -7; i < 7; i++) {
+    displayText('2',  255,0, 0, i);
+    delay(200);
+  }
+  for (int i = -7; i < 7; i++) {
+    displayText('3', 0,0,255, i);
+    delay(200);
+  }
+  for (int i = -7; i < 7; i++) {
+    displayText('4', 255, 255, 0, i);
+    delay(200);
+  }
+  for (int i = -7; i < 7; i++) {
+    displayText('5', 0, 255, 255, i);
+    delay(200);
+  }
+  for (int i = -7; i < 7; i++) {
+    displayText('6', 255, 0, 255, i);
+    delay(200);
+  }
+  for (int i = -7; i < 7; i++) {
+    displayText('7', 200, 200, 200, i);
+    delay(200);
+  }
+  for (int i = -7; i < 7; i++) {
+    displayText('8', 50, 50, 50, i);
+    delay(200);
+  }
+  for (int i = -7; i < 7; i++) {
+    displayText('9', 0, 255, 80, i);
+    delay(200);
+  }
 ;}
 
 //update display buffer using x,y,r,g,b format
