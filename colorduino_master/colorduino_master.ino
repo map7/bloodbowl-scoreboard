@@ -166,40 +166,44 @@ void loop()
 
   //Display Text for writing out scrolling messages
   for (int i = -7; i < 7; i++) {
+    displayText('0', 0, 255, 0, i);
+    delay(100);
+  }
+  for (int i = -7; i < 7; i++) {
     displayText('1', 0, 255, 0, i);
-    delay(200);
+    delay(100);
   }
   for (int i = -7; i < 7; i++) {
     displayText('2',  255,0, 0, i);
-    delay(200);
+    delay(100);
   }
   for (int i = -7; i < 7; i++) {
     displayText('3', 0,0,255, i);
-    delay(200);
+    delay(100);
   }
   for (int i = -7; i < 7; i++) {
     displayText('4', 255, 255, 0, i);
-    delay(200);
+    delay(100);
   }
   for (int i = -7; i < 7; i++) {
     displayText('5', 0, 255, 255, i);
-    delay(200);
+    delay(100);
   }
   for (int i = -7; i < 7; i++) {
     displayText('6', 255, 0, 255, i);
-    delay(200);
+    delay(100);
   }
   for (int i = -7; i < 7; i++) {
-    displayText('7', 200, 200, 200, i);
-    delay(200);
+    displayText('7', 201, 201, 201, i);
+    delay(100);
   }
   for (int i = -7; i < 7; i++) {
     displayText('8', 50, 50, 50, i);
-    delay(200);
+    delay(100);
   }
   for (int i = -7; i < 7; i++) {
     displayText('9', 0, 255, 80, i);
-    delay(200);
+    delay(100);
   }
 ;}
 
