@@ -47,33 +47,6 @@ void setup() {
   Wire.onReceive(receiveEvent);    // register event
   //Serial.begin(9600);              // start serial for output
 
-  // O
-  Colorduino.SetPixel(5,0,255,0,0);
-  Colorduino.SetPixel(5,1,255,0,0);
-  Colorduino.SetPixel(5,2,255,0,0);
-  Colorduino.SetPixel(4,0,255,0,0);
-  Colorduino.SetPixel(4,2,255,0,0);
-  Colorduino.SetPixel(3,0,255,0,0);
-  Colorduino.SetPixel(3,2,255,0,0);
-  Colorduino.SetPixel(2,0,255,0,0);
-  Colorduino.SetPixel(2,2,255,0,0);
-  Colorduino.SetPixel(1,0,255,0,0);
-  Colorduino.SetPixel(1,1,255,0,0);
-  Colorduino.SetPixel(1,2,255,0,0);
-
-  // K
-  Colorduino.SetPixel(5,4,255,0,0);
-  Colorduino.SetPixel(5,6,255,0,0);
-  Colorduino.SetPixel(4,4,255,0,0);
-  Colorduino.SetPixel(4,6,255,0,0);
-  Colorduino.SetPixel(3,4,255,0,0);
-  Colorduino.SetPixel(3,5,255,0,0);
-  Colorduino.SetPixel(2,4,255,0,0);
-  Colorduino.SetPixel(2,5,255,0,0);
-  Colorduino.SetPixel(1,4,255,0,0);
-  Colorduino.SetPixel(1,6,255,0,0);
-  
-  Colorduino.FlipPage(); // swap screen buffers to show it
 }
 
 void loop() {
