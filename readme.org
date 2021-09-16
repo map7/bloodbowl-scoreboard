@@ -1,0 +1,6 @@
+* Readme
+
+| bloodbowl         | Real code for the scoreboard                      |
+| colorduino_master | Example code for my notebook to talk to the slave |
+| colorduino_slave  | Firmware to be loaded onto the Colorduino for I2C |
+| colorduino_tetris | Example game, couldn't get it working.            |
