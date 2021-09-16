@@ -14,10 +14,23 @@
 #define SCREENSIZEX 8            //num of LEDs accross
 #define SCREENSIZEY 8            //num of LEDs down
 
+// --------------------------------------------------------------------------------
+/* Initialise */
+// --------------------------------------------------------------------------------
+// delay time between faces
+unsigned long delaytime=200;
+
+const int buzzer = 9; //buzzer to arduino pin 9
+int inPin = 2;   // choose the input pin (for a pushbutton)
+int counter = 0;
+int buttonState = 0;         // current state of the button
+int lastButtonState = 0;
+// --------------------------------------------------------------------------------
+
+
 byte display_byte[3][64];        //display array - 64 bytes x 3 colours
 
-const unsigned char font8_8[92][8] PROGMEM =
-{
+const unsigned char font8_8[92][8] PROGMEM = {
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },   // sp
     { 0x00, 0x00, 0x00, 0x00, 0x2f, 0x00, 0x00, 0x00 },   // !
     { 0x00, 0x00, 0x00, 0x07, 0x00, 0x07, 0x00, 0x00 },   // "
@@ -120,6 +133,7 @@ typedef struct
   unsigned char b;
 } ColorRGB;
 
+
 //a color with 3 components: h, s and v
 typedef struct
 {
@@ -131,15 +145,49 @@ typedef struct
 unsigned char plasma[SCREENSIZEX][SCREENSIZEY];
 long paletteShift;
 
+// --------------------------------------------------------------------------------
+
+
 void setup()
 {
   Wire.begin(); // join i2c bus (address optional for master)
+  pinMode(inPin, INPUT);         /* declare pushbutton */
 }
 
 void loop()
 {
-  displayText('3',255,0,0,0);
-;}
+  if (counter > 9) {
+    counter = 0;
+  }
+
+  char counterChar = char(counter + 48); // Because char is converting ASCII counters 48=zero
+  displayText(counterChar,255,0,0,0);
+
+  // read the pushbutton input pin:
+  buttonState = digitalRead(inPin);
+
+  // compare the buttonState to its previous state
+  if (buttonState != lastButtonState) {
+
+    // if the state has changed, increment the counter
+    if (buttonState == HIGH) {
+
+      // if the current state is HIGH then the button went from off to on:
+      counter++;
+
+    } else {
+      delay(50);
+    }
+  }
+
+  // save the current state as the last state, for next time through the loop
+  lastButtonState = buttonState;
+}
+
+
+// --------------------------------------------------------------------------------
+// Display code for colorduino
+// --------------------------------------------------------------------------------
 
 //update display buffer using x,y,r,g,b format
 void display(byte x, byte y, byte r, byte g, byte b) {
