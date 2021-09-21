@@ -25,6 +25,15 @@ int inPin = 2;   // choose the input pin (for a pushbutton)
 int counter = 0;
 int buttonState = 0;         // current state of the button
 int lastButtonState = 0;
+
+/* Hall Sensor */
+int hallSensorPin = 4;
+int ledPin =  13;
+int state = 0;
+boolean lastHallState = false;
+
+int hallTimeout = 0;
+
 // --------------------------------------------------------------------------------
 
 
@@ -152,10 +161,14 @@ void setup()
 {
   Wire.begin(); // join i2c bus (address optional for master)
   pinMode(inPin, INPUT);         /* declare pushbutton */
+
+  pinMode(ledPin, OUTPUT);
+  pinMode(hallSensorPin, INPUT);
 }
 
 void loop()
 {
+
   if (counter > 9) {
     counter = 0;
   }
@@ -182,8 +195,22 @@ void loop()
 
   // save the current state as the last state, for next time through the loop
   lastButtonState = buttonState;
-}
 
+  /* Hall Sensor */
+  state = digitalRead(hallSensorPin);
+  if (state == LOW && lastHallState == HIGH ) {
+    /* Piece is placed on sensor */
+    counter++;
+    delay(50);
+  }
+  else {
+    /* Piece is removed from sensor */
+    hallTimeout=0;
+  }
+
+  hallTimeout++;
+  lastHallState = state;
+}
 
 // --------------------------------------------------------------------------------
 // Display code for colorduino
