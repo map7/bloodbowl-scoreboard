@@ -29,7 +29,7 @@ int lastButtonState = 0;
 /* Hall Sensor */
 int hallSensorPin = 4;
 int ledPin =  13;
-int state = 0;
+int hallState = 0;
 boolean lastHallState = false;
 
 int hallTimeout = 0;
@@ -197,7 +197,7 @@ void loop()
   lastButtonState = buttonState;
 
   /* Hall Sensor */
-  state = digitalRead(hallSensorPin);
+  hallState = digitalRead(hallSensorPin);
 
   /* hallTimeout (20 = 1sec) */
   if (hallTimeout > 0){
@@ -207,7 +207,7 @@ void loop()
   }else{
     digitalWrite(ledPin, LOW); /* Turn off light */
 
-    if (state == LOW && lastHallState == HIGH) {
+    if (hallState == LOW && lastHallState == HIGH) {
 
       /* Piece is placed on sensor */
       counter++;
@@ -216,7 +216,7 @@ void loop()
     }
   }
 
-  lastHallState = state;
+  lastHallState = hallState;
 }
 
 // --------------------------------------------------------------------------------
