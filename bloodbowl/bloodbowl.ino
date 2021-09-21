@@ -151,11 +151,7 @@ typedef struct
   unsigned char v;
 } ColorHSV;
 
-unsigned char plasma[SCREENSIZEX][SCREENSIZEY];
-long paletteShift;
-
 // --------------------------------------------------------------------------------
-
 
 void setup()
 {
