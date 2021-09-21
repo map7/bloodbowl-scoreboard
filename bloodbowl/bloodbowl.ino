@@ -33,7 +33,6 @@ int state = 0;
 boolean lastHallState = false;
 
 int hallTimeout = 0;
-boolean hallTriggered = false;
 
 // --------------------------------------------------------------------------------
 
@@ -201,25 +200,22 @@ void loop()
   state = digitalRead(hallSensorPin);
 
   /* hallTimeout (20 = 1sec) */
-  if (hallTriggered == true && hallTimeout < 200){
-    /* do nothing */
+  if (hallTimeout > 0){
+    hallTimeout--;
+    digitalWrite(ledPin, HIGH); /* Turn on light */
+
   }else{
+    digitalWrite(ledPin, LOW); /* Turn off light */
 
     if (state == LOW && lastHallState == HIGH) {
 
       /* Piece is placed on sensor */
       counter++;
+      hallTimeout = 200;
       delay(50);
-      hallTriggered = true;
     }
-    else if(state == HIGH) {
-      /* Piece is removed from sensor */
-      hallTimeout=0;
-    }
-
   }
 
-  hallTimeout++;
   lastHallState = state;
 }
 
