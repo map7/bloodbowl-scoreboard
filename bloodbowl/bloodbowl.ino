@@ -166,16 +166,26 @@ void setup()
   pinMode(hallSensorPin, INPUT);
 }
 
-void loop()
-{
+void loop(){
+  wrapCounter();                /* Wrap counter back to 0 after getting to 9 */
+  displayCounter();             /* Display 0-9 on the 8x8 screen */
+  buttonEvent();                /* Add one if button pushed */
+  hallEvent();                  /* Add one if magnet is sensed by hall sensor */
+}
 
+void wrapCounter(){
   if (counter > 9) {
     counter = 0;
   }
+}
 
+void displayCounter(){
   char counterChar = char(counter + 48); // Because char is converting ASCII counters 48=zero
   displayText(counterChar,255,0,0,0);
+}
 
+/* Manual override switch to add one to the counter */
+void buttonEvent(){
   // read the pushbutton input pin:
   buttonState = digitalRead(inPin);
 
@@ -195,7 +205,13 @@ void loop()
 
   // save the current state as the last state, for next time through the loop
   lastButtonState = buttonState;
+}
 
+/*
+   Someone puts a magnet on the hall sensor, increase counter by 1
+   When hall sensor is triggered wait 1 minute before it allows increasing by one.
+*/
+void hallEvent(){
   /* Hall Sensor */
   hallState = digitalRead(hallSensorPin);
 
