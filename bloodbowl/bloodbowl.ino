@@ -34,6 +34,10 @@ boolean lastHallState = false;
 
 int hallTimeout = 0;
 
+/* Ultrasonic Setup */
+const int pingPin = 7; // Trigger Pin of Ultrasonic Sensor
+const int echoPin = 6; // Echo Pin of Ultrasonic Sensor
+
 // --------------------------------------------------------------------------------
 
 
@@ -160,6 +164,8 @@ void setup()
 
   pinMode(ledPin, OUTPUT);
   pinMode(hallSensorPin, INPUT);
+
+  Serial.begin(9600); // Starting Serial Terminal
 }
 
 void loop(){
@@ -167,6 +173,36 @@ void loop(){
   displayCounter();             /* Display 0-9 on the 8x8 screen */
   buttonEvent();                /* Add one if button pushed */
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
+  ultrasonicEvent();            /* Ultrasonic sensor */
+}
+
+void ultrasonicEvent(){
+   long duration, inches, cm;
+   pinMode(pingPin, OUTPUT);
+
+   digitalWrite(pingPin, LOW);
+   delayMicroseconds(2);
+   digitalWrite(pingPin, HIGH);
+   delayMicroseconds(10);
+   digitalWrite(pingPin, LOW);
+   pinMode(echoPin, INPUT);
+   duration = pulseIn(echoPin, HIGH);
+   inches = microsecondsToInches(duration);
+   cm = microsecondsToCentimeters(duration);
+   Serial.print(inches);
+   Serial.print("in, ");
+   Serial.print(cm);
+   Serial.print("cm");
+   Serial.println();
+   delay(100);
+}
+
+long microsecondsToInches(long microseconds) {
+   return microseconds / 74 / 2;
+}
+
+long microsecondsToCentimeters(long microseconds) {
+   return microseconds / 29 / 2;
 }
 
 void wrapCounter(){
