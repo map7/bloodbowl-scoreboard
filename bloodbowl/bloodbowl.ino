@@ -172,11 +172,11 @@ void setup()
 }
 
 void loop(){
-  /* wrapCounter();                /\* Wrap counter back to 0 after getting to 9 *\/ */
-  /* displayCounter();             /\* Display 0-9 on the 8x8 screen *\/ */
-  /* buttonEvent();                /\* Add one if button pushed *\/ */
-  /* hallEvent();                  /\* Add one if magnet is sensed by hall sensor *\/ */
-  ultrasonicEvent();            /* Ultrasonic sensor */
+  wrapCounter();                /* Wrap counter back to 0 after getting to 9 */
+  buttonEvent();                /* Add one if button pushed */
+  hallEvent();                  /* Add one if magnet is sensed by hall sensor */
+  // ultrasonicEvent();         /* Ultrasonic sensor  */
+  displayCounter();             /* Display 0-9 on the 8x8 screen */
 }
 
 void ultrasonicEvent(){
@@ -198,7 +198,7 @@ void ultrasonicEvent(){
    Serial.print("cm");
    Serial.println();
    int avg=sonicCalcAvg(cm);
-   displayUltrasonic(avg);
+   counter = avg;               /* Assign to the display counter */
    delay(100);
 }
 
@@ -224,12 +224,6 @@ int sonicCalcAvg(int cm){
     sonicReadsPos++;
   }
   return sonicAvg;
-}
-
-void displayUltrasonic(int avg){
-  int counter = avg - 3;
-  char counterChar = char(counter + 48); // Because char is converting ASCII counters 48=zero
-  displayText(counterChar,255,0,0,0);
 }
 
 void wrapCounter(){
