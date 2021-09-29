@@ -37,6 +37,9 @@ int hallTimeout = 0;
 /* Ultrasonic Setup */
 const int pingPin = 7; // Trigger Pin of Ultrasonic Sensor
 const int echoPin = 6; // Echo Pin of Ultrasonic Sensor
+int sonicReads[10];
+int sonicReadsPos = 0;
+int sonicAvg = 0;
 
 // --------------------------------------------------------------------------------
 
@@ -169,10 +172,10 @@ void setup()
 }
 
 void loop(){
-  wrapCounter();                /* Wrap counter back to 0 after getting to 9 */
-  displayCounter();             /* Display 0-9 on the 8x8 screen */
-  buttonEvent();                /* Add one if button pushed */
-  hallEvent();                  /* Add one if magnet is sensed by hall sensor */
+  /* wrapCounter();                /\* Wrap counter back to 0 after getting to 9 *\/ */
+  /* displayCounter();             /\* Display 0-9 on the 8x8 screen *\/ */
+  /* buttonEvent();                /\* Add one if button pushed *\/ */
+  /* hallEvent();                  /\* Add one if magnet is sensed by hall sensor *\/ */
   ultrasonicEvent();            /* Ultrasonic sensor */
 }
 
@@ -194,6 +197,8 @@ void ultrasonicEvent(){
    Serial.print(cm);
    Serial.print("cm");
    Serial.println();
+   int avg=sonicCalcAvg(cm);
+   displayUltrasonic(avg);
    delay(100);
 }
 
@@ -203,6 +208,28 @@ long microsecondsToInches(long microseconds) {
 
 long microsecondsToCentimeters(long microseconds) {
    return microseconds / 29 / 2;
+}
+
+int sonicCalcAvg(int cm){
+  if (sonicReadsPos > 9){
+    int sonicTotal=0;
+    for (int i=0; i < 9; i++){
+      sonicTotal = sonicTotal + sonicReads[i];
+    }
+    sonicAvg = sonicTotal / 9;
+    sonicReadsPos = 0;
+
+  }else{
+    sonicReads[sonicReadsPos] = cm;
+    sonicReadsPos++;
+  }
+  return sonicAvg;
+}
+
+void displayUltrasonic(int avg){
+  int counter = avg - 3;
+  char counterChar = char(counter + 48); // Because char is converting ASCII counters 48=zero
+  displayText(counterChar,255,0,0,0);
 }
 
 void wrapCounter(){
