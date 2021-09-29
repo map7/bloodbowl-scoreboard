@@ -179,6 +179,69 @@ void loop(){
   displayCounter();             /* Display 0-9 on the 8x8 screen */
 }
 
+
+// --------------------------------------------------------------------------------
+// Button code
+// --------------------------------------------------------------------------------
+
+/* Manual override switch to add one to the counter */
+void buttonEvent(){
+  // read the pushbutton input pin:
+  buttonState = digitalRead(inPin);
+
+  // compare the buttonState to its previous state
+  if (buttonState != lastButtonState) {
+
+    // if the state has changed, increment the counter
+    if (buttonState == HIGH) {
+
+      // if the current state is HIGH then the button went from off to on:
+      counter++;
+
+    } else {
+      delay(50);
+    }
+  }
+
+  // save the current state as the last state, for next time through the loop
+  lastButtonState = buttonState;
+}
+
+// --------------------------------------------------------------------------------
+// Hall code
+// --------------------------------------------------------------------------------
+/*
+   Someone puts a magnet on the hall sensor, increase counter by 1
+   When hall sensor is triggered wait 1 minute before it allows increasing by one.
+*/
+void hallEvent(){
+  /* Hall Sensor */
+  hallState = digitalRead(hallSensorPin);
+
+  /* hallTimeout (20 = 1sec) */
+  if (hallTimeout > 0){
+    hallTimeout--;
+    digitalWrite(ledPin, HIGH); /* Turn on light */
+
+  }else{
+    digitalWrite(ledPin, LOW); /* Turn off light */
+
+    if (hallState == LOW && lastHallState == HIGH) {
+
+      /* Piece is placed on sensor */
+      counter++;
+      hallTimeout = 200;
+      delay(50);
+    }
+  }
+
+  lastHallState = hallState;
+}
+
+// --------------------------------------------------------------------------------
+// Ultrasonic code
+// --------------------------------------------------------------------------------
+
 void ultrasonicEvent(){
    long duration, inches, cm;
    pinMode(pingPin, OUTPUT);
@@ -226,66 +289,18 @@ int sonicCalcAvg(int cm){
   return sonicAvg;
 }
 
+// --------------------------------------------------------------------------------
+// Display general functions
+// --------------------------------------------------------------------------------
+
 void wrapCounter(){
   if (counter > 9) {
     counter = 0;
   }
 }
-
 void displayCounter(){
   char counterChar = char(counter + 48); // Because char is converting ASCII counters 48=zero
   displayText(counterChar,255,0,0,0);
-}
-
-/* Manual override switch to add one to the counter */
-void buttonEvent(){
-  // read the pushbutton input pin:
-  buttonState = digitalRead(inPin);
-
-  // compare the buttonState to its previous state
-  if (buttonState != lastButtonState) {
-
-    // if the state has changed, increment the counter
-    if (buttonState == HIGH) {
-
-      // if the current state is HIGH then the button went from off to on:
-      counter++;
-
-    } else {
-      delay(50);
-    }
-  }
-
-  // save the current state as the last state, for next time through the loop
-  lastButtonState = buttonState;
-}
-
-/*
-   Someone puts a magnet on the hall sensor, increase counter by 1
-   When hall sensor is triggered wait 1 minute before it allows increasing by one.
-*/
-void hallEvent(){
-  /* Hall Sensor */
-  hallState = digitalRead(hallSensorPin);
-
-  /* hallTimeout (20 = 1sec) */
-  if (hallTimeout > 0){
-    hallTimeout--;
-    digitalWrite(ledPin, HIGH); /* Turn on light */
-
-  }else{
-    digitalWrite(ledPin, LOW); /* Turn off light */
-
-    if (hallState == LOW && lastHallState == HIGH) {
-
-      /* Piece is placed on sensor */
-      counter++;
-      hallTimeout = 200;
-      delay(50);
-    }
-  }
-
-  lastHallState = hallState;
 }
 
 // --------------------------------------------------------------------------------
