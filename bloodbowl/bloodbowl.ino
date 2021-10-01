@@ -175,7 +175,7 @@ void loop(){
   wrapCounter();                /* Wrap counter back to 0 after getting to 9 */
   buttonEvent();                /* Add one if button pushed */
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
-  // ultrasonicEvent();         /* Ultrasonic sensor  */
+  ultrasonicEvent();         /* Ultrasonic sensor  */
   displayCounter();             /* Display 0-9 on the 8x8 screen */
 }
 
@@ -253,20 +253,17 @@ void ultrasonicEvent(){
    digitalWrite(pingPin, LOW);
    pinMode(echoPin, INPUT);
    duration = pulseIn(echoPin, HIGH);
-   inches = microsecondsToInches(duration);
    cm = microsecondsToCentimeters(duration);
-   Serial.print(inches);
-   Serial.print("in, ");
-   Serial.print(cm);
-   Serial.print("cm");
-   Serial.println();
-   int avg=sonicCalcAvg(cm);
-   counter = avg;               /* Assign to the display counter */
-   delay(100);
-}
 
-long microsecondsToInches(long microseconds) {
-   return microseconds / 74 / 2;
+   if (cm < 50){
+     Serial.print(cm);
+     Serial.print("cm");
+     Serial.println();
+     int avg=sonicCalcAvg(cm);
+     counter = avg;               /* Assign to the display counter */
+   }
+
+   delay(100);
 }
 
 long microsecondsToCentimeters(long microseconds) {
@@ -274,6 +271,7 @@ long microsecondsToCentimeters(long microseconds) {
 }
 
 int sonicCalcAvg(int cm){
+
   if (sonicReadsPos > 9){
     int sonicTotal=0;
     for (int i=0; i < 9; i++){
