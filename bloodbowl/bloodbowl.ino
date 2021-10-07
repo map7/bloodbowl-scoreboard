@@ -11,7 +11,7 @@
 #define END_OF_DATA 0x20         //data markers
 
 // Colorduino ONE I2C 5
-#define DEST_I2C_ADDR 0x05       //set destination I2C address (match firmware in Colorduino)
+#define DEST_I2C_ADDR1 0x05       //set destination I2C address (match firmware in Colorduino)
 
 // Colorduino TWO I2C 6
 #define DEST_I2C_ADDR2 0x06       //set destination I2C address (match firmware in Colorduino)
@@ -25,10 +25,11 @@
 // delay time between faces
 unsigned long delaytime=200;
 
-const int buzzer = 9; //buzzer to arduino pin 9
-int inPin = 2;   // choose the input pin (for a pushbutton)
-int counter = 0;
-int buttonState = 0;         // current state of the button
+int inPin = 2;                  // choose the input pin (for a pushbutton)
+int counter = 0;                /* DEPRECATED: Old Counter */
+int counter1 = 0;               /* Counter for 8x8 Matrix #1  */
+int counter2 = 0;               /* Counter for 8x8 Matrix #2  */
+int buttonState = 0;            // current state of the button
 int lastButtonState = 0;
 
 /* Hall Sensor */
@@ -181,7 +182,7 @@ void loop(){
   buttonEvent();                /* Add one if button pushed */
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
   //ultrasonicEvent();          /* Ultrasonic sensor  */
-  displayCounter();             /* Display 0-9 on the 8x8 screen */
+  displayCounters();             /* Display 0-9 on the 8x8 screen */
 }
 
 
@@ -201,7 +202,7 @@ void buttonEvent(){
     if (buttonState == HIGH) {
 
       // if the current state is HIGH then the button went from off to on:
-      counter++;
+      counter1++;
 
     } else {
       delay(50);
@@ -234,7 +235,7 @@ void hallEvent(){
     if (hallState == LOW && lastHallState == HIGH) {
 
       /* Piece is placed on sensor */
-      counter++;
+      counter2++;
       hallTimeout = 200;
       delay(50);
     }
@@ -300,10 +301,19 @@ void wrapCounter(){
   if (counter > 9) {
     counter = 0;
   }
+  if (counter1 > 9) {
+    counter1 = 0;
+  }
+  if (counter2 > 9) {
+    counter2 = 0;
+  }
 }
-void displayCounter(){
-  char counterChar = char(counter + 48); // Because char is converting ASCII counters 48=zero
-  displayText(counterChar,255,0,0,0);
+void displayCounters(){
+  char counter1Char = char(counter1 + 48); // Because char is converting ASCII counters 48=zero
+  displayText(counter1Char,255,0,0,0,1);
+
+  char counter2Char = char(counter2 + 48); // Because char is converting ASCII counters 48=zero
+  displayText(counter2Char,255,0,0,0,2);
 }
 
 // --------------------------------------------------------------------------------
@@ -341,7 +351,7 @@ static void BlinkM_sendBuffer(byte addr, byte col, byte* disp_data) {
   }
 }
 
-void displayText(char chr, unsigned char R, unsigned char G, unsigned char B, char bias) {
+void displayText(char chr, unsigned char R, unsigned char G, unsigned char B, char bias, int screen) {
   unsigned char x,y;
   unsigned char i,j,temp;
   unsigned char Char;
@@ -380,6 +390,11 @@ void displayText(char chr, unsigned char R, unsigned char G, unsigned char B, ch
       temp = temp << 1;
     }
   }
-  update_display(DEST_I2C_ADDR);
-  update_display(DEST_I2C_ADDR2);
+
+  if (screen == 1){
+    update_display(DEST_I2C_ADDR1);
+  } else {
+    update_display(DEST_I2C_ADDR2);
+  }
+
 }
