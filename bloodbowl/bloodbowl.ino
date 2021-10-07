@@ -9,7 +9,12 @@
 
 #define START_OF_DATA 0x10       //data markers
 #define END_OF_DATA 0x20         //data markers
-#define DEST_I2C_ADDR 0x05       //set destination I2C address (must match firmware in Colorduino module)
+
+// Colorduino ONE I2C 5
+#define DEST_I2C_ADDR 0x05       //set destination I2C address (match firmware in Colorduino)
+
+// Colorduino TWO I2C 6
+#define DEST_I2C_ADDR2 0x06       //set destination I2C address (match firmware in Colorduino)
 
 #define SCREENSIZEX 8            //num of LEDs accross
 #define SCREENSIZEY 8            //num of LEDs down
@@ -376,4 +381,5 @@ void displayText(char chr, unsigned char R, unsigned char G, unsigned char B, ch
     }
   }
   update_display(DEST_I2C_ADDR);
+  update_display(DEST_I2C_ADDR2);
 }
