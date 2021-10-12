@@ -47,6 +47,10 @@ int sonicReads[10];
 int sonicReadsPos = 0;
 int sonicAvg = 0;
 
+/* RTC */
+#include "RTClib.h" // Rtc Lib
+RTC_DS1307 RTC;
+
 // --------------------------------------------------------------------------------
 
 
@@ -175,14 +179,31 @@ void setup()
   pinMode(hallSensorPin, INPUT);
 
   Serial.begin(9600); // Starting Serial Terminal
+
+  RTC.begin();                  /* Start the clock */
 }
 
 void loop(){
   wrapCounter();                /* Wrap counter back to 0 after getting to 9 */
+  getTime();                    /* Get the time from the RTC for countdown */
   buttonEvent();                /* Add one if button pushed */
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
   //ultrasonicEvent();          /* Ultrasonic sensor  */
   displayCounters();             /* Display 0-9 on the 8x8 screen */
+}
+
+void getTime(){
+    Serial.print("Starting");
+    DateTime now = RTC.now();
+
+    Serial.print(now.hour(), DEC);
+    Serial.print(':');
+    Serial.print(now.minute(), DEC);
+    Serial.print(':');
+    Serial.print(now.second(), DEC);
+
+    Serial.println();
+    delay(1000);
 }
 
 
