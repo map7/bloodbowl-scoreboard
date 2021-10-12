@@ -193,17 +193,21 @@ void loop(){
 }
 
 void getTime(){
-    Serial.print("Starting");
+    /* Serial.print("Starting"); */
     DateTime now = RTC.now();
 
-    Serial.print(now.hour(), DEC);
-    Serial.print(':');
-    Serial.print(now.minute(), DEC);
-    Serial.print(':');
-    Serial.print(now.second(), DEC);
+    /* Serial.print(now.hour(), DEC); */
+    /* Serial.print(':'); */
+    /* Serial.print(now.minute(), DEC); */
+    /* Serial.print(':'); */
 
-    Serial.println();
-    delay(1000);
+    int seconds=now.second();
+    /* Serial.print(seconds, DEC); */
+
+    counter1=seconds / 10;
+    counter2=seconds % 10;
+
+    /* Serial.println(); */
 }
 
 
