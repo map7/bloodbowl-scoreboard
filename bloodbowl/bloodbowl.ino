@@ -40,13 +40,6 @@ boolean lastHallState = false;
 
 int hallTimeout = 0;
 
-/* Ultrasonic Setup */
-const int pingPin = 7; // Trigger Pin of Ultrasonic Sensor
-const int echoPin = 6; // Echo Pin of Ultrasonic Sensor
-int sonicReads[10];
-int sonicReadsPos = 0;
-int sonicAvg = 0;
-
 /* RTC */
 #include "RTClib.h" // Rtc Lib
 RTC_DS1307 RTC;
@@ -188,7 +181,6 @@ void loop(){
   getTime();                    /* Get the time from the RTC for countdown */
   buttonEvent();                /* Add one if button pushed */
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
-  //ultrasonicEvent();          /* Ultrasonic sensor  */
   displayCounters();             /* Display 0-9 on the 8x8 screen */
 }
 
@@ -267,55 +259,6 @@ void hallEvent(){
   }
 
   lastHallState = hallState;
-}
-
-// --------------------------------------------------------------------------------
-// Ultrasonic code
-// --------------------------------------------------------------------------------
-
-void ultrasonicEvent(){
-   long duration, inches, cm;
-   pinMode(pingPin, OUTPUT);
-
-   digitalWrite(pingPin, LOW);
-   delayMicroseconds(2);
-   digitalWrite(pingPin, HIGH);
-   delayMicroseconds(10);
-   digitalWrite(pingPin, LOW);
-   pinMode(echoPin, INPUT);
-   duration = pulseIn(echoPin, HIGH);
-   cm = microsecondsToCentimeters(duration);
-
-   if (cm < 50){
-     Serial.print(cm);
-     Serial.print("cm");
-     Serial.println();
-     int avg=sonicCalcAvg(cm);
-     counter = avg;               /* Assign to the display counter */
-   }
-
-   delay(100);
-}
-
-long microsecondsToCentimeters(long microseconds) {
-   return microseconds / 29 / 2;
-}
-
-int sonicCalcAvg(int cm){
-
-  if (sonicReadsPos > 9){
-    int sonicTotal=0;
-    for (int i=0; i < 9; i++){
-      sonicTotal = sonicTotal + sonicReads[i];
-    }
-    sonicAvg = sonicTotal / 9;
-    sonicReadsPos = 0;
-
-  }else{
-    sonicReads[sonicReadsPos] = cm;
-    sonicReadsPos++;
-  }
-  return sonicAvg;
 }
 
 // --------------------------------------------------------------------------------
