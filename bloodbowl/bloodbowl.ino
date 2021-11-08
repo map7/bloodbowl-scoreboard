@@ -312,23 +312,29 @@ void hallEvent(){
 // 8 Digit 7 Segment Display - Methods
 // --------------------------------------------------------------------------------
 
-void displayCountdown(){
-
-  /* Blank everything */
-  for(byte i=0;i<8;i++){
+void blankRounds(){
+  for(byte i=4;i<8;i++){
     MAX7219senddata(i+1,15);
   }
+}
 
-  /* /\* Display 3.00 *\/ */
-  /* MAX7219senddata(3,243); */
-  /* MAX7219senddata(2,0); */
-  /* MAX7219senddata(1,0); */
+void blankCountdown(){
+  for(byte i=0;i<4;i++){
+    MAX7219senddata(i+1,15);
+  }
+}
 
+void displayCountdown(){
+
+  blankCountdown();
+
+  /* Split up the seconds into minutes and seconds for display */
   int m1 = counter / 60;
   int secs = counter % 60;
   int s1 = secs / 10;
   int s2 = secs % 10;
 
+  /* Display the countdown */
   MAX7219senddata(3,m1);
   MAX7219senddata(2,s1);
   MAX7219senddata(1,s2);
