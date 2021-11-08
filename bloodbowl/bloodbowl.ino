@@ -329,16 +329,16 @@ void displayCountdown(){
   blankCountdown();
 
   /* Split up the seconds into minutes and seconds for display */
-  int m1 = counter / 60;
+  int minute = counter / 60;
   int secs = counter % 60;
   int s1 = secs / 10;
   int s2 = secs % 10;
 
   /* Add the dot */
-  m1 += 240;
+  minute += 240;
 
   /* Display the countdown */
-  MAX7219senddata(3,m1);
+  MAX7219senddata(3,minute);
   MAX7219senddata(2,s1);
   MAX7219senddata(1,s2);
 
