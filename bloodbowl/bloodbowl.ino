@@ -211,20 +211,22 @@ int getSeconds(){
   return now.second();
 }
 
+void adjustCounter(){
+  if (counter <= 0){
+    resetCounter();
+  } else {
+    counter--;
+  }
+}
+
 void calcCounter(){
-  /* Get current seconds */
   int currentSeconds = getSeconds();
 
   /* Compare previous & current seconds */
   if (RTCPrevSeconds != currentSeconds){
-    if (counter <= 0){
-      resetCounter();
-    } else {
-      counter--;
-    }
+    adjustCounter();
     RTCPrevSeconds=getSeconds();
   }
-
 }
 
 // --------------------------------------------------------------------------------
