@@ -334,6 +334,9 @@ void displayCountdown(){
   int s1 = secs / 10;
   int s2 = secs % 10;
 
+  /* Add the dot */
+  m1 += 240;
+
   /* Display the countdown */
   MAX7219senddata(3,m1);
   MAX7219senddata(2,s1);
