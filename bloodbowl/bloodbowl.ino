@@ -44,6 +44,11 @@ int hallTimeout = 0;
 #include "RTClib.h" // Rtc Lib
 RTC_DS1307 RTC;
 
+/* 8 Digit 7 Segment Display - Variables */
+#define MAX7219DIN 4
+#define MAX7219CS 5
+#define MAX7219CLK 6
+
 // --------------------------------------------------------------------------------
 
 
@@ -174,6 +179,10 @@ void setup()
   Serial.begin(9600); // Starting Serial Terminal
 
   RTC.begin();                  /* Start the clock */
+
+  /* 8 Digit 7 Segment Display - Initialise */
+  MAX7219init();
+  MAX7219brightness(15);
 }
 
 void loop(){
@@ -182,6 +191,8 @@ void loop(){
   buttonEvent();                /* Add one if button pushed */
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
   displayCounters();             /* Display 0-9 on the 8x8 screen */
+
+  displayCountdown();           /* Display a countdown starting at 3minutes for the round */
 }
 
 void getTime(){
@@ -259,6 +270,65 @@ void hallEvent(){
   }
 
   lastHallState = hallState;
+}
+
+// --------------------------------------------------------------------------------
+// 8 Digit 7 Segment Display - Methods
+// --------------------------------------------------------------------------------
+
+void displayCountdown(){
+
+  /* Blank everything */
+  for(byte i=0;i<8;i++){
+    MAX7219senddata(i+1,15);
+  }
+
+  /* Display 3.00 */
+  MAX7219senddata(3,243);
+  MAX7219senddata(2,0);
+  MAX7219senddata(1,0);
+}
+
+void MAX7219brightness(byte b){  //0-15 is range high nybble is ignored
+  MAX7219senddata(10,b);        //intensity
+}
+
+void MAX7219init(){
+  pinMode(MAX7219DIN,OUTPUT);
+  pinMode(MAX7219CS,OUTPUT);
+  pinMode(MAX7219CLK,OUTPUT);
+  digitalWrite(MAX7219CS,HIGH);   //CS off
+  digitalWrite(MAX7219CLK,LOW);   //CLK low
+  MAX7219senddata(15,0);        //test mode off
+  MAX7219senddata(12,1);        //display on
+  MAX7219senddata(9,255);       //decode all digits
+  MAX7219senddata(11,7);        //scan all
+  for(int i=1;i<9;i++){
+    MAX7219senddata(i,0);       //blank all
+  }
+}
+
+void MAX7219senddata(byte reg, byte data){
+  digitalWrite(MAX7219CS,LOW);   //CS on
+  for(int i=128;i>0;i=i>>1){
+    if(i&reg){
+      digitalWrite(MAX7219DIN,HIGH);
+    }else{
+      digitalWrite(MAX7219DIN,LOW);
+    }
+    digitalWrite(MAX7219CLK,HIGH);
+    digitalWrite(MAX7219CLK,LOW);   //CLK toggle
+  }
+  for(int i=128;i>0;i=i>>1){
+    if(i&data){
+      digitalWrite(MAX7219DIN,HIGH);
+    }else{
+      digitalWrite(MAX7219DIN,LOW);
+    }
+    digitalWrite(MAX7219CLK,HIGH);
+    digitalWrite(MAX7219CLK,LOW);   //CLK toggle
+  }
+  digitalWrite(MAX7219CS,HIGH);   //CS off
 }
 
 // --------------------------------------------------------------------------------
