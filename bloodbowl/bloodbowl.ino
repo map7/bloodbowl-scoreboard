@@ -306,23 +306,29 @@ void blankCountdown(){
   }
 }
 
-void displayCountdown(){
+int counterMinute(){
+  int minute = counter / 60;    /* Calculate minute */
+  minute += 240;                /* Add dot */
+  return minute;
+}
 
+int counterSecondPart2(){
+  int secs = counter % 60;
+  return secs / 10;
+}
+
+int counterSecondPart1(){
+  int secs = counter % 60;
+  return secs % 10;
+}
+
+void displayCountdown(){
   blankCountdown();
 
-  /* Split up the seconds into minutes and seconds for display */
-  int minute = counter / 60;
-  int secs = counter % 60;
-  int sec1 = secs / 10;         /* Seconds part 1 */
-  int sec2 = secs % 10;         /* Seconds part 2 */
-
-  /* Add the dot */
-  minute += 240;
-
   /* Display the countdown */
-  MAX7219senddata(3,minute);
-  MAX7219senddata(2,sec1);
-  MAX7219senddata(1,sec2);
+  MAX7219senddata(3,counterMinute());
+  MAX7219senddata(2,counterSecondPart2());
+  MAX7219senddata(1,counterSecondPart1());
 }
 
 // --------------------------------------------------------------------------------
