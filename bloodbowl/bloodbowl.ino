@@ -189,7 +189,7 @@ void setup()
 
 void loop(){
   wrapCounter();                /* Wrap counter back to 0 after getting to 9 */
-  getTime();                    /* Get the time from the RTC for countdown */
+  //getTime();                    /* DEPRECIATED: Get the time from the RTC for countdown */
   buttonEvent();                /* Add one if button pushed */
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
   displayCounters();             /* Display 0-9 on the 8x8 screen */
