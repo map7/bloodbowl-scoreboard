@@ -202,33 +202,6 @@ void loop(){
 
 /* When the reset button is hit we'll store the time from the RTC */
 
-void resetCounter(){
-  counter=MAXCOUNTER;
-}
-
-int getSeconds(){
-  DateTime now = RTC.now();
-  return now.second();
-}
-
-void adjustCounter(){
-  if (counter <= 0){
-    resetCounter();
-  } else {
-    counter--;
-  }
-}
-
-void calcCounter(){
-  int currentSeconds = getSeconds();
-
-  /* Compare previous & current seconds */
-  if (RTCPrevSeconds != currentSeconds){
-    adjustCounter();
-    RTCPrevSeconds=getSeconds();
-  }
-}
-
 // --------------------------------------------------------------------------------
 // Button code
 // --------------------------------------------------------------------------------
@@ -287,13 +260,43 @@ void hallEvent(){
   lastHallState = hallState;
 }
 
-// --------------------------------------------------------------------------------
-// 8 Digit 7 Segment Display - Methods
-// --------------------------------------------------------------------------------
 
+// --------------------------------------------------------------------------------
+// Rounds code
+// --------------------------------------------------------------------------------
 void blankRounds(){
   for(byte i=4;i<8;i++){
     MAX7219senddata(i+1,0);
+  }
+}
+
+// --------------------------------------------------------------------------------
+// Counterdown code
+// --------------------------------------------------------------------------------
+void resetCounter(){
+  counter=MAXCOUNTER;
+}
+
+int getSeconds(){
+  DateTime now = RTC.now();
+  return now.second();
+}
+
+void adjustCounter(){
+  if (counter <= 0){
+    resetCounter();
+  } else {
+    counter--;
+  }
+}
+
+void calcCounter(){
+  int currentSeconds = getSeconds();
+
+  /* Compare previous & current seconds */
+  if (RTCPrevSeconds != currentSeconds){
+    adjustCounter();
+    RTCPrevSeconds=getSeconds();
   }
 }
 
@@ -320,8 +323,12 @@ void displayCountdown(){
   MAX7219senddata(3,minute);
   MAX7219senddata(2,sec1);
   MAX7219senddata(1,sec2);
-
 }
+
+// --------------------------------------------------------------------------------
+// 8 Digit 7 Segment Display - Methods
+// --------------------------------------------------------------------------------
+
 
 void MAX7219brightness(byte b){  //0-15 is range high nybble is ignored
   MAX7219senddata(10,b);        //intensity
