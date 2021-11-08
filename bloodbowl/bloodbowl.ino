@@ -33,7 +33,7 @@ int buttonState = 0;            // current state of the button
 int lastButtonState = 0;
 
 /* Hall Sensor */
-int hallSensorPin = 4;
+int hallSensorPin = 3;
 int ledPin =  13;
 int hallState = 0;
 boolean lastHallState = false;
