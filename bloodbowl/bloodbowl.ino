@@ -26,7 +26,6 @@
 unsigned long delaytime=200;
 
 int inPin = 2;                  // choose the input pin (for a pushbutton)
-int counter = 0;                /* DEPRECATED: Old Counter */
 int counter1 = 0;               /* Counter for 8x8 Matrix #1  */
 int counter2 = 0;               /* Counter for 8x8 Matrix #2  */
 int buttonState = 0;            // current state of the button
@@ -45,6 +44,8 @@ int hallTimeout = 0;
 RTC_DS1307 RTC;
 
 /* 8 Digit 7 Segment Display - Variables */
+int counter = 180;         /* Counter for 8 Digit 7 Segment Counter */
+int RTCPrevSeconds = 0;        /* Store the RTC seconds value */
 #define MAX7219DIN 4
 #define MAX7219CS 5
 #define MAX7219CLK 6
@@ -181,6 +182,7 @@ void setup()
   RTC.begin();                  /* Start the clock */
 
   /* 8 Digit 7 Segment Display - Initialise */
+  getRTCSeconds();
   MAX7219init();
   MAX7219brightness(15);
 }
@@ -192,7 +194,36 @@ void loop(){
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
   displayCounters();             /* Display 0-9 on the 8x8 screen */
 
+  calcCounter();
   displayCountdown();           /* Display a countdown starting at 3minutes for the round */
+}
+
+/* When the reset button is hit we'll store the time from the RTC */
+
+void resetCounter(){
+  counter=180;
+}
+
+void calcCounter(){
+  /* Get current seconds */
+  DateTime now = RTC.now();
+  int currentSeconds = now.second();
+
+  /* Stored previous seconds */
+  if (RTCPrevSeconds != currentSeconds){
+    counter--;
+    getRTCSeconds();
+  }
+
+  //counter = currentSeconds;
+
+
+  /* total 180 seconds */
+}
+
+void getRTCSeconds(){
+    DateTime now = RTC.now();
+    RTCPrevSeconds=now.second();
 }
 
 void getTime(){
@@ -283,10 +314,20 @@ void displayCountdown(){
     MAX7219senddata(i+1,15);
   }
 
-  /* Display 3.00 */
-  MAX7219senddata(3,243);
-  MAX7219senddata(2,0);
-  MAX7219senddata(1,0);
+  /* /\* Display 3.00 *\/ */
+  /* MAX7219senddata(3,243); */
+  /* MAX7219senddata(2,0); */
+  /* MAX7219senddata(1,0); */
+
+  int m1 = counter / 60;
+  int secs = counter % 60;
+  int s1 = secs / 10;
+  int s2 = secs % 10;
+
+  MAX7219senddata(3,m1);
+  MAX7219senddata(2,s1);
+  MAX7219senddata(1,s2);
+
 }
 
 void MAX7219brightness(byte b){  //0-15 is range high nybble is ignored
@@ -336,9 +377,6 @@ void MAX7219senddata(byte reg, byte data){
 // --------------------------------------------------------------------------------
 
 void wrapCounter(){
-  if (counter > 9) {
-    counter = 0;
-  }
   if (counter1 > 9) {
     counter1 = 0;
   }
