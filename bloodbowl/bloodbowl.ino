@@ -195,6 +195,8 @@ void loop(){
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
   displayCounters();             /* Display 0-9 on the 8x8 screen */
 
+  blankRounds();
+
   calcCounter();
   displayCountdown();           /* Display a countdown starting at 3minutes for the round */
 }
@@ -314,7 +316,7 @@ void hallEvent(){
 
 void blankRounds(){
   for(byte i=4;i<8;i++){
-    MAX7219senddata(i+1,15);
+    MAX7219senddata(i+1,0);
   }
 }
 
