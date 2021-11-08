@@ -44,7 +44,8 @@ int hallTimeout = 0;
 RTC_DS1307 RTC;
 
 /* 8 Digit 7 Segment Display - Variables */
-int counter = 180;         /* Counter for 8 Digit 7 Segment Counter */
+#define MAXCOUNTER 180
+int counter = MAXCOUNTER;         /* Counter for 8 Digit 7 Segment Counter */
 int RTCPrevSeconds = 0;        /* Store the RTC seconds value */
 #define MAX7219DIN 4
 #define MAX7219CS 5
@@ -201,7 +202,7 @@ void loop(){
 /* When the reset button is hit we'll store the time from the RTC */
 
 void resetCounter(){
-  counter=180;
+  counter=MAXCOUNTER;
 }
 
 void calcCounter(){
@@ -211,7 +212,11 @@ void calcCounter(){
 
   /* Stored previous seconds */
   if (RTCPrevSeconds != currentSeconds){
-    counter--;
+    if (counter == 0){
+      resetCounter();
+    } else {
+      counter--;
+    }
     getRTCSeconds();
   }
 
