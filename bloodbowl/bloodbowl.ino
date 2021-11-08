@@ -214,7 +214,7 @@ void calcCounter(){
 
   /* Stored previous seconds */
   if (RTCPrevSeconds != currentSeconds){
-    if (counter == 0){
+    if (counter <= 0){
       resetCounter();
     } else {
       counter--;
