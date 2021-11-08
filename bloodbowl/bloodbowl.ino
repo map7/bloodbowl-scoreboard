@@ -183,7 +183,7 @@ void setup()
   RTC.begin();                  /* Start the clock */
 
   /* 8 Digit 7 Segment Display - Initialise */
-  getRTCSeconds();
+  RTCPrevSeconds=getSeconds();
   MAX7219init();
   MAX7219brightness(15);
 }
@@ -206,30 +206,25 @@ void resetCounter(){
   counter=MAXCOUNTER;
 }
 
+int getSeconds(){
+  DateTime now = RTC.now();
+  return now.second();
+}
+
 void calcCounter(){
   /* Get current seconds */
-  DateTime now = RTC.now();
-  int currentSeconds = now.second();
+  int currentSeconds = getSeconds();
 
-  /* Stored previous seconds */
+  /* Compare previous & current seconds */
   if (RTCPrevSeconds != currentSeconds){
     if (counter <= 0){
       resetCounter();
     } else {
       counter--;
     }
-    getRTCSeconds();
+    RTCPrevSeconds=getSeconds();
   }
 
-  //counter = currentSeconds;
-
-
-  /* total 180 seconds */
-}
-
-void getRTCSeconds(){
-    DateTime now = RTC.now();
-    RTCPrevSeconds=now.second();
 }
 
 // --------------------------------------------------------------------------------
