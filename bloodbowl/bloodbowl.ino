@@ -196,8 +196,7 @@ void loop(){
 
   blankRounds();
 
-  calcCounter();
-  displayCountdown();           /* Display a countdown starting at 3minutes for the round */
+  calcCounter();                /* Calc and display when necessary */
 }
 
 /* When the reset button is hit we'll store the time from the RTC */
@@ -287,6 +286,7 @@ void adjustCounter(){
     resetCounter();
   } else {
     counter--;
+    displayCountdown();
   }
 }
 
@@ -321,6 +321,8 @@ int counterSecondPart1(){
 
 void displayCountdown(){
   blankCountdown();
+
+  Serial.println(counter);
 
   /* Display the countdown */
   MAX7219senddata(3,counterMinute());
