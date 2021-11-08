@@ -190,7 +190,6 @@ void setup()
 
 void loop(){
   wrapCounter();                /* Wrap counter back to 0 after getting to 9 */
-  //getTime();                    /* DEPRECIATED: Get the time from the RTC for countdown */
   buttonEvent();                /* Add one if button pushed */
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
   displayCounters();             /* Display 0-9 on the 8x8 screen */
@@ -232,25 +231,6 @@ void getRTCSeconds(){
     DateTime now = RTC.now();
     RTCPrevSeconds=now.second();
 }
-
-void getTime(){
-    /* Serial.print("Starting"); */
-    DateTime now = RTC.now();
-
-    /* Serial.print(now.hour(), DEC); */
-    /* Serial.print(':'); */
-    /* Serial.print(now.minute(), DEC); */
-    /* Serial.print(':'); */
-
-    int seconds=now.second();
-    /* Serial.print(seconds, DEC); */
-
-    counter1=seconds / 10;
-    counter2=seconds % 10;
-
-    /* Serial.println(); */
-}
-
 
 // --------------------------------------------------------------------------------
 // Button code
