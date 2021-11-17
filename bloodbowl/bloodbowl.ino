@@ -32,10 +32,10 @@ int buttonState = 0;            // current state of the button
 int lastButtonState = 0;
 
 /* Hall Sensor */
-int hallSensorPins[] = {2, 3};         // PIN2 = 1sT Player, PIN3 = 2nd Player
-int hallStates[] = {0,0};
+int hallSensorPins[] =     {2, 3};         // PIN2 = 1sT Player, PIN3 = 2nd Player
+int hallStates[] =         {0, 0};
 boolean lastHallStates[] = {false,false};
-int hallTimeouts[] = {0,0};
+int hallTimeouts[] =       {0, 0};
 
 int ledPin =  13;
 
@@ -235,27 +235,36 @@ void buttonEvent(){
    When hall sensor is triggered wait 1 minute before it allows increasing by one.
 */
 void hallEvent(){
-  /* Hall Sensor */
-  hallStates[1] = digitalRead(hallSensorPins[1]);
 
-  /* hallTimeouts[1] (20 = 1sec) */
-  if (hallTimeouts[1] > 0){
-    hallTimeouts[1]--;
-    digitalWrite(ledPin, HIGH); /* Turn on light */
+  for(int i=0;i<2;i++){
 
-  }else{
-    digitalWrite(ledPin, LOW); /* Turn off light */
+    Serial.print("hallEvent");
+    Serial.println(i);
 
-    if (hallStates[1] == LOW && lastHallStates[1] == HIGH) {
+    /* Hall Sensor */
+    hallStates[i] = digitalRead(hallSensorPins[i]);
 
-      /* Piece is placed on sensor */
-      counter2++;
-      hallTimeouts[1] = 200;
-      delay(50);
+    /* hallTimeouts[i] (20 = 1sec) */
+    if (hallTimeouts[i] > 0){
+      hallTimeouts[i]--;
+      digitalWrite(ledPin, HIGH); /* Turn on light */
+
+    }else{
+      digitalWrite(ledPin, LOW); /* Turn off light */
+
+      if (hallStates[i] == LOW && lastHallStates[i] == HIGH) {
+
+        /* Piece is placed on sensor */
+        counter2++;
+        hallTimeouts[i] = 200;
+        delay(50);
+      }
     }
+
+    lastHallStates[i] = hallStates[i];
+
   }
 
-  lastHallStates[1] = hallStates[1];
 }
 
 
