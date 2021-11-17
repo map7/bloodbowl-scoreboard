@@ -25,10 +25,10 @@
 // delay time between faces
 unsigned long delaytime=200;
 
-int inPin = 7;                  // choose the input pin (for a pushbutton)
-int counters[] = {0, 0};               /* Counter for 8x8 Matrix #2  */
-int buttonState = 0;            // current state of the button
-int lastButtonState = 0;
+int playerBtnPins[] = {7,8};   // Buttons for adding score for P1 & P2
+int counters[] = {0, 0};       /* Counter for 8x8 Matrix #2  */
+int buttonState = 0;           // current state of the button
+int lastButtonState[] = {0,0};
 
 /* Hall Sensor */
 int hallSensorPins[] =     {2, 3};         // PIN2 = 1sT Player, PIN3 = 2nd Player
@@ -171,10 +171,12 @@ typedef struct
 void setup()
 {
   Wire.begin(); // join i2c bus (address optional for master)
-  pinMode(inPin, INPUT);         /* declare pushbutton */
+  pinMode(playerBtnPins[0], INPUT); /* Player 1 */
+  pinMode(playerBtnPins[1], INPUT); /* Player 2 */
 
   pinMode(ledPin, OUTPUT);
-  pinMode(hallSensorPins[1], INPUT);
+  pinMode(hallSensorPins[0], INPUT); /* Player 1 magnet */
+  pinMode(hallSensorPins[1], INPUT); /* Player 2 magnet */
 
   Serial.begin(9600); // Starting Serial Terminal
 
@@ -205,25 +207,26 @@ void loop(){
 
 /* Manual override switch to add one to the counter */
 void buttonEvent(){
-  // read the pushbutton input pin:
-  buttonState = digitalRead(inPin);
+  for(int i=0;i<2;i++){
+    // read the pushbutton input pin:
+    buttonState = digitalRead(playerBtnPins[i]);
 
-  // compare the buttonState to its previous state
-  if (buttonState != lastButtonState) {
+    // compare the buttonState to its previous state
+    if (buttonState != lastButtonState[i]) {
 
-    // if the state has changed, increment the counter
-    if (buttonState == HIGH) {
+      // if the state has changed, increment the counter
+      if (buttonState == HIGH) {
 
-      // if the current state is HIGH then the button went from off to on:
-      counters[0]++;
-
-    } else {
-      delay(50);
+        // if the current state is HIGH then the button went from off to on:
+        counters[i]++;
+      }else{
+        delay(50);
+      }
     }
-  }
 
-  // save the current state as the last state, for next time through the loop
-  lastButtonState = buttonState;
+    // save the current state as the last state, for next time through the loop
+    lastButtonState[i] = buttonState;
+  }
 }
 
 // --------------------------------------------------------------------------------
