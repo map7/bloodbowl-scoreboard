@@ -25,7 +25,7 @@
 // delay time between faces
 unsigned long delaytime=200;
 
-int inPin = 2;                  // choose the input pin (for a pushbutton)
+int inPin = 7;                  // choose the input pin (for a pushbutton)
 int counter1 = 0;               /* Counter for 8x8 Matrix #1  */
 int counter2 = 0;               /* Counter for 8x8 Matrix #2  */
 int buttonState = 0;            // current state of the button
