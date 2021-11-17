@@ -26,8 +26,7 @@
 unsigned long delaytime=200;
 
 int inPin = 7;                  // choose the input pin (for a pushbutton)
-int counter1 = 0;               /* Counter for 8x8 Matrix #1  */
-int counter2 = 0;               /* Counter for 8x8 Matrix #2  */
+int counters[] = {0, 0};               /* Counter for 8x8 Matrix #2  */
 int buttonState = 0;            // current state of the button
 int lastButtonState = 0;
 
@@ -216,7 +215,7 @@ void buttonEvent(){
     if (buttonState == HIGH) {
 
       // if the current state is HIGH then the button went from off to on:
-      counter1++;
+      counters[0]++;
 
     } else {
       delay(50);
@@ -255,7 +254,7 @@ void hallEvent(){
       if (hallStates[i] == LOW && lastHallStates[i] == HIGH) {
 
         /* Piece is placed on sensor */
-        counter2++;
+        counters[i]++;
         hallTimeouts[i] = 200;
         delay(50);
       }
@@ -390,18 +389,18 @@ void MAX7219senddata(byte reg, byte data){
 // --------------------------------------------------------------------------------
 
 void wrapCounter(){
-  if (counter1 > 9) {
-    counter1 = 0;
+  if (counters[0] > 9) {
+    counters[0] = 0;
   }
-  if (counter2 > 9) {
-    counter2 = 0;
+  if (counters[1] > 9) {
+    counters[1] = 0;
   }
 }
 void displayCounters(){
-  char counter1Char = char(counter1 + 48); // Because char is converting ASCII counters 48=zero
+  char counter1Char = char(counters[0] + 48); // Because char is converting ASCII counters 48=zero
   displayText(counter1Char,255,0,0,0,1);
 
-  char counter2Char = char(counter2 + 48); // Because char is converting ASCII counters 48=zero
+  char counter2Char = char(counters[1] + 48); // Because char is converting ASCII counters 48=zero
   displayText(counter2Char,255,0,0,0,2);
 }
 
