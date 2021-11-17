@@ -32,12 +32,12 @@ int buttonState = 0;            // current state of the button
 int lastButtonState = 0;
 
 /* Hall Sensor */
-int hallSensorPin = 3;
-int ledPin =  13;
-int hallState = 0;
-boolean lastHallState = false;
+int hallSensorPins[] = {2, 3};         // PIN2 = 1sT Player, PIN3 = 2nd Player
+int hallStates[] = {0,0};
+boolean lastHallStates[] = {false,false};
+int hallTimeouts[] = {0,0};
 
-int hallTimeout = 0;
+int ledPin =  13;
 
 /* RTC */
 #include "RTClib.h" // Rtc Lib
@@ -52,7 +52,6 @@ int RTCPrevSeconds = 0;        /* Store the RTC seconds value */
 #define MAX7219CLK 6
 
 // --------------------------------------------------------------------------------
-
 
 byte display_byte[3][64];        //display array - 64 bytes x 3 colours
 
@@ -176,7 +175,7 @@ void setup()
   pinMode(inPin, INPUT);         /* declare pushbutton */
 
   pinMode(ledPin, OUTPUT);
-  pinMode(hallSensorPin, INPUT);
+  pinMode(hallSensorPins[1], INPUT);
 
   Serial.begin(9600); // Starting Serial Terminal
 
@@ -237,26 +236,26 @@ void buttonEvent(){
 */
 void hallEvent(){
   /* Hall Sensor */
-  hallState = digitalRead(hallSensorPin);
+  hallStates[1] = digitalRead(hallSensorPins[1]);
 
-  /* hallTimeout (20 = 1sec) */
-  if (hallTimeout > 0){
-    hallTimeout--;
+  /* hallTimeouts[1] (20 = 1sec) */
+  if (hallTimeouts[1] > 0){
+    hallTimeouts[1]--;
     digitalWrite(ledPin, HIGH); /* Turn on light */
 
   }else{
     digitalWrite(ledPin, LOW); /* Turn off light */
 
-    if (hallState == LOW && lastHallState == HIGH) {
+    if (hallStates[1] == LOW && lastHallStates[1] == HIGH) {
 
       /* Piece is placed on sensor */
       counter2++;
-      hallTimeout = 200;
+      hallTimeouts[1] = 200;
       delay(50);
     }
   }
 
-  lastHallState = hallState;
+  lastHallStates[1] = hallStates[1];
 }
 
 
