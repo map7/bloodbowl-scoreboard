@@ -56,7 +56,7 @@ int RTCPrevSeconds = 0;        /* Store the RTC seconds value */
 int roundBtnPin = 10;
 int roundBtnState = 0;
 int lastRoundBtnState = 0;
-int roundCounter = 0;
+int roundsCounter[] = {0,0};
 
 // --------------------------------------------------------------------------------
 
@@ -291,18 +291,18 @@ void blankRounds(){
 }
 
 void nextRound(){
-  if (roundCounter < 16){
-    roundCounter++;                  /* Increase round */
+  if (roundsCounter[1] < 16){
+    roundsCounter[1]++;                  /* Increase round */
   }else{
-    roundCounter = 0;
+    roundsCounter[1] = 0;
   }
 }
 
 void displayRound(){
-  int roundCounter1=roundCounter / 10;
-  int roundCounter2=roundCounter % 10;
-  MAX7219senddata(6,roundCounter1); /* Display */
-  MAX7219senddata(5,roundCounter2); /* Display */
+  int roundCounterPos6=roundsCounter[1] / 10;
+  int roundCounterPos5=roundsCounter[1] % 10;
+  MAX7219senddata(6,roundCounterPos6); /* Display */
+  MAX7219senddata(5,roundCounterPos5); /* Display */
 }
 
 void buttonRound(){
