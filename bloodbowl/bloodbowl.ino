@@ -317,6 +317,7 @@ void nextRound(){
 void displayRound(){
   int roundCounterPos8=roundsCounter[0] / 10;
   int roundCounterPos7=roundsCounter[0] % 10;
+  roundCounterPos7 = roundCounterPos7 + 240; /* Add dot */
   int roundCounterPos6=roundsCounter[1] / 10;
   int roundCounterPos5=roundsCounter[1] % 10;
   MAX7219senddata(8,roundCounterPos8); /* Display */
