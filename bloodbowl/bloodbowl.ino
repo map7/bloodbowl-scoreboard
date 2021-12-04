@@ -315,15 +315,32 @@ void nextRound(){
 }
 
 void displayRound(){
+
+  /* Player1 */
   int roundCounterPos8=roundsCounter[0] / 10;
   int roundCounterPos7=roundsCounter[0] % 10;
   roundCounterPos7 = roundCounterPos7 + 240; /* Add dot */
-  int roundCounterPos6=roundsCounter[1] / 10;
-  int roundCounterPos5=roundsCounter[1] % 10;
   MAX7219senddata(8,roundCounterPos8); /* Display */
   MAX7219senddata(7,roundCounterPos7); /* Display */
+
+  /* Player 2 */
+  int roundCounterPos6=roundsCounter[1] / 10;
+  int roundCounterPos5=roundsCounter[1] % 10;
   MAX7219senddata(6,roundCounterPos6); /* Display */
   MAX7219senddata(5,roundCounterPos5); /* Display */
+}
+
+void gameOver(){
+  /* Display a loop flashing it off and on for 5 seconds */
+  for(byte i=0;i<10;i++){
+    displayRound();
+    delay(500);
+    blankRounds();
+    delay(500);
+  }
+  roundsCounter[0]=0;
+  roundsCounter[1]=0;
+  displayRound();
 }
 
 void buttonRound(){
@@ -337,17 +354,7 @@ void buttonRound(){
       nextRound();
 
       if (roundsCounter[0] == 16 || roundsCounter[1] == 16){
-        /* Display a loop flashing it off and on for 5 seconds */
-        for(byte i=0;i<10;i++){
-          displayRound();
-          delay(500);
-          blankRounds();
-          delay(500);
-        }
-        roundsCounter[0]=0;
-        roundsCounter[1]=0;
-        displayRound();
-
+        gameOver();
       }else{
         displayRound();
       }
