@@ -52,6 +52,9 @@ int RTCPrevSeconds = 0;        /* Store the RTC seconds value */
 #define MAX7219CS 5
 #define MAX7219CLK 6
 
+/* Rounds */
+int roundBtnPin = 10;
+
 // --------------------------------------------------------------------------------
 
 byte display_byte[3][64];        //display array - 64 bytes x 3 colours
@@ -179,6 +182,7 @@ void setup()
   pinMode(hallSensorPins[1], INPUT); /* Player 2 magnet */
 
   pinMode(startBtnPin, INPUT);  /* Start counter button */
+  pinMode(roundBtnPin, INPUT);  /* Next Round button */
 
   Serial.begin(9600); // Starting Serial Terminal
 
@@ -194,6 +198,7 @@ void loop(){
   wrapCounter();                /* Wrap counter back to 0 after getting to 9 */
   buttonEvent();                /* Add one if button pushed */
   buttonStart();                /* Control start of counter */
+  buttonRound();                /* Next round button */
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
   displayCounters();             /* Display 0-9 on the 8x8 screen */
 
@@ -282,6 +287,16 @@ void blankRounds(){
   }
 }
 
+void buttonRound(){
+  if (digitalRead(roundBtnPin) == HIGH){
+    resetCounter();
+    displayCountdown();
+    startCounter = false;
+    //    nextRound();
+  }
+}
+
+
 // --------------------------------------------------------------------------------
 // Counterdown code
 // --------------------------------------------------------------------------------
@@ -303,7 +318,7 @@ void adjustCounter(){
   }
 }
 
-int buttonStart(){
+void buttonStart(){
   if (digitalRead(startBtnPin) == HIGH){
     startCounter = true;
   }
