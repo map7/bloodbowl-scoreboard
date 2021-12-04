@@ -291,11 +291,16 @@ void blankRounds(){
 }
 
 void nextRound(){
-  roundCounter++;                  /* Increase round */
+  if (roundCounter < 16){
+    roundCounter++;                  /* Increase round */
+  }
 }
 
 void displayRound(){
-  MAX7219senddata(5,roundCounter); /* Display */
+  int roundCounter1=roundCounter / 10;
+  int roundCounter2=roundCounter % 10;
+  MAX7219senddata(6,roundCounter1); /* Display */
+  MAX7219senddata(5,roundCounter2); /* Display */
 }
 
 void buttonRound(){
