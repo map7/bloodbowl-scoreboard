@@ -29,6 +29,7 @@ int playerBtnPins[] = {7,8};   // Buttons for adding score for P1 & P2
 int counters[] = {0, 0};       /* Counter for 8x8 Matrix #2  */
 int buttonState = 0;           // current state of the button
 int lastButtonState[] = {0,0};
+boolean startCounter = false;   /* Controlled by a start button */
 
 /* Hall Sensor */
 int hallSensorPins[] =     {2, 3};         // PIN2 = 1sT Player, PIN3 = 2nd Player
@@ -150,8 +151,7 @@ const unsigned char font8_8[92][8] PROGMEM = {
 };
 
 //setup for plasma
-typedef struct
-{
+typedef struct {
   unsigned char r;
   unsigned char g;
   unsigned char b;
@@ -159,8 +159,7 @@ typedef struct
 
 
 //a color with 3 components: h, s and v
-typedef struct
-{
+typedef struct {
   unsigned char h;
   unsigned char s;
   unsigned char v;
@@ -293,7 +292,7 @@ int currentSeconds(){
 
 void adjustCounter(){
   if (counter <= 0){
-    resetCounter();
+    resetCounter();             /* wrap around to 3:00 */
   } else {
     counter--;
     displayCountdown();
@@ -301,9 +300,14 @@ void adjustCounter(){
 }
 
 void calcCounter(){
-  if (RTCPrevSeconds != currentSeconds()){
-    adjustCounter();
-    RTCPrevSeconds=currentSeconds();
+  if (startCounter == true){
+    if (RTCPrevSeconds != currentSeconds()){
+      adjustCounter();
+      RTCPrevSeconds=currentSeconds();
+    }
+  }else{
+    resetCounter();
+    displayCountdown();
   }
 }
 
