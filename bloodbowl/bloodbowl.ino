@@ -292,6 +292,9 @@ void blankRounds(){
 
 void nextRound(){
   roundCounter++;                  /* Increase round */
+}
+
+void displayRound(){
   MAX7219senddata(5,roundCounter); /* Display */
 }
 
@@ -304,6 +307,7 @@ void buttonRound(){
       displayCountdown();
       startCounter = false;
       nextRound();
+      displayRound();
     }
 
     lastRoundBtnState = roundBtnState;
