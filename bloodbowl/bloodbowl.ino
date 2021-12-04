@@ -311,7 +311,7 @@ int currentSeconds(){
 
 void adjustCounter(){
   if (counter <= 0){
-    resetCounter();             /* wrap around to 3:00 */
+    //resetCounter();             /* wrap around to 3:00 */
   } else {
     counter--;
     displayCountdown();
