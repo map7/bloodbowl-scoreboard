@@ -286,11 +286,12 @@ void hallEvent(){
 // --------------------------------------------------------------------------------
 void blankRounds(){
   for(byte i=4;i<8;i++){
-    MAX7219senddata(i+1,0);
+    MAX7219senddata(i+1,15);
   }
 }
 
 void nextRound(){
+
   /* Check if Player 1 round equals Player 2 round */
   if (roundsCounter[0] == roundsCounter[1]){
 
@@ -309,7 +310,6 @@ void nextRound(){
     }else{
       roundsCounter[1] = 0;
     }
-
   }
 
 }
@@ -335,7 +335,22 @@ void buttonRound(){
       displayCountdown();
       startCounter = false;
       nextRound();
-      displayRound();
+
+      if (roundsCounter[0] == 16 || roundsCounter[1] == 16){
+        /* Display a loop flashing it off and on for 5 seconds */
+        for(byte i=0;i<10;i++){
+          displayRound();
+          delay(500);
+          blankRounds();
+          delay(500);
+        }
+        roundsCounter[0]=0;
+        roundsCounter[1]=0;
+        displayRound();
+
+      }else{
+        displayRound();
+      }
     }
 
     lastRoundBtnState = roundBtnState;
