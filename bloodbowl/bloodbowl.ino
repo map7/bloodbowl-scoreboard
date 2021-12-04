@@ -293,6 +293,8 @@ void blankRounds(){
 void nextRound(){
   if (roundCounter < 16){
     roundCounter++;                  /* Increase round */
+  }else{
+    roundCounter = 0;
   }
 }
 
