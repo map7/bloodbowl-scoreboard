@@ -291,16 +291,36 @@ void blankRounds(){
 }
 
 void nextRound(){
-  if (roundsCounter[1] < 16){
-    roundsCounter[1]++;                  /* Increase round */
+  /* Check if Player 1 round equals Player 2 round */
+  if (roundsCounter[0] == roundsCounter[1]){
+
+    /* If it does, then player 1 adds a round */
+    if (roundsCounter[0] < 16){
+      roundsCounter[0]++;                  /* Increase round */
+    }else{
+      roundsCounter[0] = 0;
+    }
+
   }else{
-    roundsCounter[1] = 0;
+
+    /* Else player 2 adds a round */
+    if (roundsCounter[1] < 16){
+      roundsCounter[1]++;                  /* Increase round */
+    }else{
+      roundsCounter[1] = 0;
+    }
+
   }
+
 }
 
 void displayRound(){
+  int roundCounterPos8=roundsCounter[0] / 10;
+  int roundCounterPos7=roundsCounter[0] % 10;
   int roundCounterPos6=roundsCounter[1] / 10;
   int roundCounterPos5=roundsCounter[1] % 10;
+  MAX7219senddata(8,roundCounterPos8); /* Display */
+  MAX7219senddata(7,roundCounterPos7); /* Display */
   MAX7219senddata(6,roundCounterPos6); /* Display */
   MAX7219senddata(5,roundCounterPos5); /* Display */
 }
