@@ -54,6 +54,9 @@ int RTCPrevSeconds = 0;        /* Store the RTC seconds value */
 
 /* Rounds */
 int roundBtnPin = 10;
+int roundBtnState = 0;
+int lastRoundBtnState = 0;
+int roundCounter = 0;
 
 // --------------------------------------------------------------------------------
 
@@ -202,7 +205,7 @@ void loop(){
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
   displayCounters();             /* Display 0-9 on the 8x8 screen */
 
-  blankRounds();
+  //blankRounds();
 
   calcCounter();                /* Calc and display when necessary */
 }
@@ -287,12 +290,23 @@ void blankRounds(){
   }
 }
 
+void nextRound(){
+  roundCounter++;                  /* Increase round */
+  MAX7219senddata(5,roundCounter); /* Display */
+}
+
 void buttonRound(){
-  if (digitalRead(roundBtnPin) == HIGH){
-    resetCounter();
-    displayCountdown();
-    startCounter = false;
-    //    nextRound();
+  roundBtnState = digitalRead(roundBtnPin);
+
+  if (roundBtnState != lastRoundBtnState){
+    if (roundBtnState == HIGH){
+      resetCounter();
+      displayCountdown();
+      startCounter = false;
+      nextRound();
+    }
+
+    lastRoundBtnState = roundBtnState;
   }
 }
 
