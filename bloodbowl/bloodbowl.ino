@@ -30,6 +30,7 @@ int counters[] = {0, 0};       /* Counter for 8x8 Matrix #2  */
 int buttonState = 0;           // current state of the button
 int lastButtonState[] = {0,0};
 boolean startCounter = false;   /* Controlled by a start button */
+int startBtnPin = 9;
 
 /* Hall Sensor */
 int hallSensorPins[] =     {2, 3};         // PIN2 = 1sT Player, PIN3 = 2nd Player
@@ -177,6 +178,8 @@ void setup()
   pinMode(hallSensorPins[0], INPUT); /* Player 1 magnet */
   pinMode(hallSensorPins[1], INPUT); /* Player 2 magnet */
 
+  pinMode(startBtnPin, INPUT);  /* Start counter button */
+
   Serial.begin(9600); // Starting Serial Terminal
 
   RTC.begin();                  /* Start the clock */
@@ -190,6 +193,7 @@ void setup()
 void loop(){
   wrapCounter();                /* Wrap counter back to 0 after getting to 9 */
   buttonEvent();                /* Add one if button pushed */
+  buttonStart();                /* Control start of counter */
   hallEvent();                  /* Add one if magnet is sensed by hall sensor */
   displayCounters();             /* Display 0-9 on the 8x8 screen */
 
@@ -296,6 +300,12 @@ void adjustCounter(){
   } else {
     counter--;
     displayCountdown();
+  }
+}
+
+int buttonStart(){
+  if (digitalRead(startBtnPin) == HIGH){
+    startCounter = true;
   }
 }
 
